@@ -73,6 +73,7 @@ export const createWorkflowEvidence = (input: {
   readonly result: JsonValue;
   readonly upstreamProfile: AnalysisProfileCommitment | undefined;
   readonly upstreamLimitations: readonly string[];
+  readonly upstreamEvidenceLinks?: readonly string[];
 }): Evidence =>
   createEvidence(input.target, REA_WORKFLOW_PROVIDER, {
     operation: input.operation,
@@ -91,6 +92,10 @@ export const createWorkflowEvidence = (input: {
       "Derived by an REA composed workflow.",
       ...input.upstreamLimitations,
     ],
+    ...(input.upstreamEvidenceLinks !== undefined &&
+    input.upstreamEvidenceLinks.length > 0
+      ? { evidenceLinks: input.upstreamEvidenceLinks }
+      : {}),
     ...(input.operation === "batch_decompile"
       ? { locations: batchProcedureLocations(input.result) }
       : {}),

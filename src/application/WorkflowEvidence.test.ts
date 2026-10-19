@@ -377,3 +377,18 @@ it.each([
     });
   },
 );
+
+it("propagates upstream evidence links into created Evidence", () => {
+  const link1 = `ev_${"a".repeat(64)}`;
+  const link2 = `ev_${"b".repeat(64)}`;
+  const evidence = createWorkflowEvidence({
+    target: undefined,
+    operation: "inspect_native_api",
+    parameters: { procedure: "0x1000" },
+    result: { status: "complete" },
+    upstreamProfile: undefined,
+    upstreamLimitations: [],
+    upstreamEvidenceLinks: [link1, link2],
+  });
+  expect(evidence.evidence_links).toEqual([link1, link2]);
+});

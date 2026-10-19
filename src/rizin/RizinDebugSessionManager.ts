@@ -1204,6 +1204,12 @@ export class RizinDebugSessionManager {
         throw new Error(
           "Rizin did not confirm that the selected inferior FD was detached.",
         );
+      if (
+        await verifyOwnedInferiorsEnded([{ pid, startTime: processStartTime }])
+      ) {
+        session.knownInferiorIdentities.clear();
+        return { status: "no-inferior" };
+      }
       assertRizinProcessStartTimeStable(
         processStartTime,
         await readProcStartTime(pid),
